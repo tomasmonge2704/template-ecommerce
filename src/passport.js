@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const {User} = require('./mongoDB/userSchema');
+const User = require('./mongoDB/userSchema');
 const {isValidPassword,createHash} = require('./bcrypt')
 
 passport.use(
@@ -30,19 +30,26 @@ passport.use(
       passReqToCallback: true,
     },
      (req, username, password, done) => {
-      // revisa si existe algun usuario que ya tenga ese username
+      // Revisa si existe algún usuario que ya tenga ese username
       User.findOne({ username: username }, async function (err, user) {
         if (err) {
           console.log("Error in SignUp: " + err);
           return done(err);
         }
         if (user) {
-          return done('el usuario ya se encuentra registrado.');
+          return done({ mensaje: 'el usuario ya se encuentra registrado.' });
         }
+        // Revisa si existe algún usuario que ya tenga ese correo electrónico
+        const existingUser = await User.findOne({ mail: req.body.mail });
+        if (existingUser) {
+          return done({ mensaje:'El correo electrónico ya está registrado.'});
+        }
+
         try {
           const newUser = {
             username: username,
             password: createHash(password),
+            mail: req.body.mail
           };
           // Crear una nueva instancia de Upload y guardarla en la base de datos
           const user = new User(newUser);
@@ -71,6 +78,6 @@ const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+  res.status(401).send('usuario no autorizado');
 }
 module.exports = {passport,isAuthenticated};

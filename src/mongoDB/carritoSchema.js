@@ -1,33 +1,18 @@
 const mongoose = require('mongoose');
 
 const carritoSchema = new mongoose.Schema({
-  usuarioId: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Usuario',
-    required: true,
+    required: true
   },
-  productos: [{
-    productoId: {
+  productos: [
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Producto',
-      required: true,
-    },
-    cantidad: {
-      type: Number,
-      required: true,
-    },
-    precio: {
-      type: Number,
-      required: true,
-    },
-  }],
-  fechaCreacion: {
-    type: Date,
-    default: Date.now,
-    required: true,
-  },
+      required: true
+    }
+  ]
 });
 
-const Carrito = mongoose.model('Carrito', carritoSchema);
-
-module.exports = Carrito;
+module.exports = mongoose.model('Carrito', carritoSchema);

@@ -1,66 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const Carrito = require('../mongoDB/carritoSchema');
+const carritoController = require('../controllers/carritoController');
+const {isAuthenticated} = require('../passport')
 
 // Ruta para obtener el carrito de un usuario
-router.get('/:usuarioId', async (req, res) => {
-  const { usuarioId } = req.params;
-  try {
-    const carrito = await Carrito.findOne({ usuarioId }).populate('productos.productoId');
-    if (!carrito) {
-      return res.status(404).json({ error: 'El carrito no existe' });
-    }
-    res.json(carrito);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el carrito' });
-  }
-});
+router.get('/:userId',isAuthenticated, carritoController.getCarrito);
 
-// Ruta para agregar un producto al carrito
-router.post('/:usuarioId', async (req, res) => {
-  const { usuarioId } = req.params;
-  const { productoId, cantidad, precio } = req.body;
-  try {
-    const carrito = await Carrito.findOne({ usuarioId });
-    if (!carrito) {
-      const nuevoCarrito = new Carrito({
-        usuarioId,
-        productos: [{ productoId, cantidad, precio }],
-      });
-      await nuevoCarrito.save();
-      return res.json(nuevoCarrito);
-    }
-    const index = carrito.productos.findIndex((producto) => producto.productoId.toString() === productoId);
-    if (index !== -1) {
-      carrito.productos[index].cantidad += cantidad;
-    } else {
-      carrito.productos.push({ productoId, cantidad, precio });
-    }
-    await carrito.save();
-    res.json(carrito);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al agregar el producto al carrito' });
-  }
-});
+// Ruta para obtener un producto específico dentro de un carrito de un usuario
+router.get('/:userId/producto/:productoId',isAuthenticated, carritoController.getProducto);
 
-// Ruta para eliminar un producto del carrito
-router.delete('/:usuarioId/:productoId', async (req, res) => {
-  const { usuarioId, productoId } = req.params;
-  try {
-    const carrito = await Carrito.findOne({ usuarioId });
-    if (!carrito) {
-      return res.status(404).json({ error: 'El carrito no existe' });
-    }
-    const index = carrito.productos.findIndex((producto) => producto.productoId.toString() === productoId);
-    if (index === -1) {
-      return res.status(404).json({ error: 'El producto no está en el carrito' });
-    }
-    carrito.productos.splice(index, 1);
-    await carrito.save();
-    res.json(carrito);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el producto del carrito' });
-  }
-});
+// Ruta para agregar un producto al carrito de un usuario
+router.post('/:userId',isAuthenticated, carritoController.agregarProducto);
+
+// Ruta para actualizar el producto de un carrito
+router.put('/:userId/producto/:productoId',isAuthenticated, carritoController.actualizarProducto);
+
+// Ruta para eliminar un producto específico dentro de un carrito de un usuario
+router.delete('/:userId/producto/:productoId',isAuthenticated, carritoController.eliminarProducto);
+
+// Ruta para eliminar todos los productos dentro del carrito de un usuario
+router.delete('/:userId',isAuthenticated, carritoController.eliminarTodo);
 
 module.exports = router;
+

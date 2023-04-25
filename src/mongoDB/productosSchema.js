@@ -1,30 +1,31 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const mongoose = require('mongoose');
 
-const productoSchema = new Schema({
-  nombre: {
+const productoSchema = new mongoose.Schema({
+  productoId: {
     type: String,
     required: true,
+    unique: true
+  },
+  nombre: {
+    type: String,
+    required: true
   },
   precio: {
     type: Number,
-    required: true,
+    required: true
   },
-  fechaCreacion: {
+  cantidad: {
+    type: Number,
+    required: true
+  },
+  imageURL: {
+    type: String,
+    required: true
+  },
+  timestamp: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
-productoSchema.set("toJSON", {
-  virtuals: true,
-  transform: function (doc, ret) {
-    ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
-  },
-});
-
-const ProductoModel = mongoose.model("Producto", productoSchema);
-
-module.exports = ProductoModel;
+module.exports = mongoose.model('Producto', productoSchema);

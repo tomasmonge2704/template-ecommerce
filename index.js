@@ -6,7 +6,10 @@ const app = express();
 require('dotenv').config();
 const loginRoutes = require('./src/routes/login');
 const signupRoutes = require('./src/routes/signup');
-const productsRoutes = require('./src/routes/productos');
+const productsRoutes = require('./src/routes/producto');
+const cartRoutes = require('./src/routes/carrito');
+const userRoutes = require('./src/routes/user');
+
 const {connectMongoDB} = require('./src/mongoDB/connect')
 const flash = require('connect-flash');
 
@@ -28,7 +31,10 @@ app.use(passport.session());
 //rutas
 app.use('/login', loginRoutes);
 app.use('/signup', signupRoutes);
-app.use('/productos', productsRoutes);
+app.use('/api/producto', productsRoutes);
+app.use('/api/carrito', cartRoutes);
+app.use('/user', userRoutes);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
     console.log('Servidor iniciado en el puerto ' + PORT);
