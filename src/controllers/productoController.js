@@ -21,8 +21,8 @@ const getProductoById = async (req, res) => {
 
 const crearProducto = async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
-    const producto = new ProductoModel({ nombre, precio });
+    const { nombre, precio, cantidad,imageURL } = req.body;
+    const producto = new ProductoModel({nombre:nombre, precio:precio,cantidad:cantidad,imageURL:imageURL});
     await producto.save();
     res.status(201).json(producto);
   } catch (error) {
