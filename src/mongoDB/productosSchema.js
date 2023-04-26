@@ -10,12 +10,17 @@ const productoSchema = new mongoose.Schema({
     required: true
   },
   cantidad: {
-    type: Number,
-    required: true
+    type: Number
   },
-  imageURL: {
+  categoria: {
     type: String,
     required: true
+  },
+  descripcion: {
+    type: String
+  },
+  imageURL: {
+    type: String
   },
   timestamp: {
     type: Date,

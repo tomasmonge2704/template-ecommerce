@@ -80,4 +80,10 @@ const isAuthenticated = (req, res, next) => {
   }
   res.status(401).send('usuario no autorizado');
 }
-module.exports = {passport,isAuthenticated};
+const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.role == 'admin') {
+    return next();
+  }
+  res.status(401).send('usuario no autorizado');
+}
+module.exports = {passport,isAuthenticated,isAdmin};

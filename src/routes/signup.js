@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {passport} = require('../passport')
 
+router.get('/', (req, res) => {
+  res.render('signup');
+});  
+
 router.post('/', (req, res, next) => {
   passport.authenticate('signup', (err, user, info) => {
     if (err) {

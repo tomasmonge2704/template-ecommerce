@@ -21,8 +21,8 @@ const getProductoById = async (req, res) => {
 
 const crearProducto = async (req, res) => {
   try {
-    const { nombre, precio, cantidad,imageURL } = req.body;
-    const producto = new ProductoModel({nombre:nombre, precio:precio,cantidad:cantidad,imageURL:imageURL});
+    const { nombre, precio, cantidad,imageURL,categoria,descripcion } = req.body;
+    const producto = new ProductoModel({nombre:nombre, precio:precio,cantidad:cantidad,imageURL:imageURL,categoria:categoria,descripcion:descripcion});
     await producto.save();
     res.status(201).json(producto);
   } catch (error) {
@@ -32,10 +32,10 @@ const crearProducto = async (req, res) => {
 
 const actualizarProducto = async (req, res) => {
   try {
-    const { nombre, precio } = req.body;
+    const { nombre, precio,descripcion,categoria } = req.body;
     const producto = await ProductoModel.findByIdAndUpdate(
       req.params.id,
-      { nombre, precio },
+      { nombre, precio,descripcion,categoria },
       { new: true }
     );
     if (!producto) throw new Error("Producto no encontrado");

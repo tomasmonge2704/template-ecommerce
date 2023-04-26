@@ -9,12 +9,22 @@ const signupRoutes = require('./src/routes/signup');
 const productsRoutes = require('./src/routes/producto');
 const cartRoutes = require('./src/routes/carrito');
 const userRoutes = require('./src/routes/user');
-
+const indexRoutes = require('./src/routes/inicio');
+const exphbs = require('express-handlebars')
 const {connectMongoDB} = require('./src/mongoDB/connect')
 const flash = require('connect-flash');
 
 connectMongoDB()
 // Configuración de Express
+app.use(express.static('views'))
+app.engine("hbs", exphbs.engine({
+  extname: ".hbs",
+  defaultLayout: null,
+  layoutsDir: __dirname + "/views",
+  partialsDir: __dirname + "/views"
+}))
+app.set("views", "./views");
+app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(flash());
@@ -29,6 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //rutas
+app.use('/',indexRoutes)
 app.use('/login', loginRoutes);
 app.use('/signup', signupRoutes);
 app.use('/api/producto', productsRoutes);

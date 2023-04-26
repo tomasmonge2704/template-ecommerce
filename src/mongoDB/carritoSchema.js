@@ -14,25 +14,30 @@ const carritoSchema = new mongoose.Schema({
                 ref: 'Producto',
                 required: true
               },
-            nombre: {
-              type: String,
-              required: true
-            },
-            precio: {
-              type: Number,
-              required: true
-            },
-            cantidad: {
-              type: Number,
-              required: true
-            },
-            imageURL: {
-              type: String,
-              required: true
-            },
-            timestamp: {
-              type: Date,
-              default: Date.now
+              nombre: {
+                type: String,
+                required: true
+              },
+              precio: {
+                type: Number,
+                required: true
+              },
+              cantidad: {
+                type: Number
+              },
+              categoria: {
+                type: String,
+                required: true
+              },
+              descripcion: {
+                type: String
+              },
+              imageURL: {
+                type: String
+              },
+              timestamp: {
+                type: Date,
+                default: Date.now
             }
           },
         cantidad: {
