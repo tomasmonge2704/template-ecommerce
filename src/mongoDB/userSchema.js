@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const usuarioSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   role:{
     type:String,
@@ -19,6 +20,19 @@ const usuarioSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  avatar: {
+    type: String,
+    default: '/avatar.png'
+  },
+  adress:{
+    calle:{type:String},
+    altura:{type:String},
+    piso:{type:String}
+  },
+  celular:{
+    type:String
+  }
+  ,
   googleId: {
     type: String,
     default: null
